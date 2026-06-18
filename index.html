@@ -68,6 +68,16 @@
   .deload-row{display:flex;gap:8px;margin-top:12px}
   .btn.deload{flex:1;background:transparent;border:1px solid #3a6080;color:#6ab4dd;font-size:13px;font-weight:650;padding:14px 8px}
   .btn.recycle{flex:1;background:transparent;border:1px solid #3a3226;color:#c0926a;font-size:13px;font-weight:650;padding:14px 8px}
+  .group-edit{color:var(--ink-faint);font-size:13px;padding:2px 4px;margin-left:4px;opacity:0.6}
+  .group-edit:active{opacity:1;color:var(--forge)}
+  .group-name-input{background:var(--panel2);border:1px solid var(--forge);color:var(--ink);border-radius:8px;padding:4px 8px;font-size:12px;font-weight:700;width:180px;letter-spacing:.08em;text-transform:uppercase}
+  .group-actions{display:flex;gap:6px;padding:0 6px 10px}
+  .btn-ga{flex:1;padding:10px 6px;border-radius:10px;border:1px solid var(--line);font-size:12px;font-weight:650}
+  .btn-ga.save{background:var(--forge);color:#10130f;border-color:var(--forge)}
+  .btn-ga.del{background:transparent;color:#c0606a;border-color:#3a2226}
+  .btn-ga.cancel{background:transparent;color:var(--ink-dim)}
+  .addgroup{display:flex;align-items:center;justify-content:center;border:1px dashed var(--forge-soft);border-radius:14px;padding:16px;margin:4px 0 18px;color:var(--forge);font-size:14px;font-weight:650;opacity:0.7}
+  .addgroup:active{opacity:1;background:var(--forge-soft)}
   /* ---- detail ---- */
   .detail{padding:16px 16px 0}
   .hero{
@@ -327,12 +337,21 @@ function renderHome(){
   S.groups.forEach((g,gi)=>{
     const total=g.ex.length, done=g.ex.filter(loggedToday).length;
     const open=!S.collapsed[gi];
+    const editing=S.editingGroup===gi;
     html+=`<div class="group">
       <div class="group-h" onclick="toggleGroup(${gi})">
         <span class="group-arr">${open?"▾":"▸"}</span>
-        ${esc(g.name)}
+        ${editing
+          ? `<input id="gname_${gi}" class="group-name-input" value="${esc(g.name)}" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter')saveGroupName(${gi})">`
+          : esc(g.name)}
         <span class="tick">${done}/${total}</span>
-      </div>`;
+        <span class="group-edit" onclick="event.stopPropagation();editGroup(${gi})" title="Renommer / supprimer">&#9881;</span>
+      </div>
+      ${editing ? `<div class="group-actions">
+        <button class="btn-ga save" onclick="saveGroupName(${gi})">Enregistrer</button>
+        <button class="btn-ga del" onclick="deleteGroup(${gi})">Supprimer la séance</button>
+        <button class="btn-ga cancel" onclick="cancelEditGroup()">Annuler</button>
+      </div>` : ''}`;
     if(open){
       g.ex.forEach((e,ei)=>{
         const dn=loggedToday(e);
@@ -346,13 +365,28 @@ function renderHome(){
     }
     html+=`</div>`;
   });
-  html+=`<div class="empty" style="padding-top:6px">Maintiens <b>&#8801;</b> pour réordonner. Ouvre un exo → <b style="color:var(--forge)">Ajuster</b> la première fois, puis <b style="color:var(--forge)">Valider</b> chaque semaine.</div>
+  html+=`<div class="addgroup" onclick="addGroup()">+ Ajouter une séance</div>`;
+  html+=`<div class="empty" style="padding-top:6px">Maintiens <b>&#8801;</b> pour réordonner. &#9881; sur une séance pour la renommer ou supprimer.</div>
     <div class="reset" onclick="resetAll()">${confirmReset?"⚠ Confirmer ? Tout l'historique sera effacé":"↺ Réinitialiser le carnet"}</div></div>`;
   V.innerHTML=html;
+  // focus si en mode édition
+  if(S.editingGroup!=null){ const inp=document.getElementById('gname_'+S.editingGroup); if(inp){inp.focus();inp.select();} }
 }
-function toggleGroup(gi){
-  if(!S.collapsed) S.collapsed={};
-  S.collapsed[gi]=!S.collapsed[gi];
+function editGroup(gi){ S.editingGroup=gi; renderHome(); }
+function cancelEditGroup(){ S.editingGroup=null; renderHome(); }
+function saveGroupName(gi){
+  const inp=document.getElementById('gname_'+gi);
+  if(inp && inp.value.trim()) S.groups[gi].name=inp.value.trim();
+  S.editingGroup=null; save(); renderHome();
+}
+function deleteGroup(gi){
+  if(S.groups.length<=1){ toast("Impossible : au moins une séance requise"); return; }
+  S.groups.splice(gi,1);
+  S.editingGroup=null; save(); renderHome();
+}
+function addGroup(){
+  S.groups.push({name:"Nouvelle séance", ex:[]});
+  S.editingGroup=S.groups.length-1;
   save(); renderHome();
 }
 /* ---- drag-to-reorder ---- */
@@ -701,7 +735,7 @@ function resetAll(){
 (async function(){
   S = await store.get();
   if(!S || !S.groups){ S = defaults(); await store.set(S); }
-  S.view="home"; S.current=null; render();
+  S.view="home"; S.current=null; if(S.editingGroup==null) S.editingGroup=null; render();
 })();
 
 </script>

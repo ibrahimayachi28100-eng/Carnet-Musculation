@@ -38,13 +38,18 @@
   .wrap{padding:14px 14px 0}
   .group{margin-bottom:18px}
   .group-h{
-    display:flex;align-items:center;gap:8px;
-    font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--done); padding:4px 6px 10px; cursor:pointer; user-select:none;
+    display:flex;align-items:center;
+    padding:4px 6px 10px;
   }
-  .group-arr{font-size:14px;flex:0 0 auto}
+  .group-toggle{
+    display:flex;align-items:center;gap:8px;flex:1;cursor:pointer;
+    font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--done); user-select:none;
+  }
+  .seq{color:var(--ink-faint);font-weight:600}
   .group-h .tick{font-size:11px;color:var(--ink-faint);font-weight:600;letter-spacing:.04em;text-transform:none;margin-left:auto}
   .drag-handle{color:var(--ink-faint);font-size:20px;flex:0 0 auto;padding:0 4px;cursor:grab;touch-action:none}
+  .drag-handle-g{color:var(--ink-faint);font-size:16px;flex:0 0 auto;padding:0 6px 0 2px;cursor:grab;touch-action:none;opacity:0.5}
   .row.dragging{opacity:.45;background:var(--panel2)}
   /* ---- exercise row (home) ---- */
   .row{
@@ -188,7 +193,7 @@ function defaults(){
   return {
     view:"home", current:null,
     groups:[
-      {name:"Séance 1 · Triceps / Biceps", ex:[
+      {name:"Triceps / Biceps", ex:[
         MW("Dips", 10, 10, 2.5),
         R("Traction"),
         F("Poulie abdos"),
@@ -196,13 +201,13 @@ function defaults(){
         R("Curl Spider 45°"),
         R("Avant-bras (poignets)"),
       ]},
-      {name:"Séance 2 · Jambes", ex:[
+      {name:"Jambes", ex:[
         MW("Front squat", 60, 8, 5),
         R("Hip thrust"),
         R("Ischio (leg curl)"),
         R("Mollets"),
       ]},
-      {name:"Séance 3 · Pectoraux / Dos", ex:[
+      {name:"Pectoraux / Dos", ex:[
         MW("Développé couché", 100, 10, 2.5),
         MW("Développé décliné", 90, 10, 2.5),
         R("Machine pec"),
@@ -211,7 +216,7 @@ function defaults(){
         R("Tirage poulie"),
         F("Lombaire"),
       ]},
-      {name:"Séance 4 · Triceps / Biceps", ex:[
+      {name:"Triceps / Biceps (2)", ex:[
         MW("Dips", 10, 10, 2.5),
         R("Magic triceps"),
         R("Poulie triceps"),
@@ -338,13 +343,16 @@ function renderHome(){
     const total=g.ex.length, done=g.ex.filter(loggedToday).length;
     const open=!S.collapsed[gi];
     const editing=S.editingGroup===gi;
-    html+=`<div class="group">
-      <div class="group-h" onclick="toggleGroup(${gi})">
-        <span class="group-arr">${open?"▾":"▸"}</span>
-        ${editing
-          ? `<input id="gname_${gi}" class="group-name-input" value="${esc(g.name)}" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter')saveGroupName(${gi})">`
-          : esc(g.name)}
-        <span class="tick">${done}/${total}</span>
+    html+=`<div class="group" id="grp_${gi}">
+      <div class="group-h">
+        <div class="drag-handle-g" id="dg_${gi}">&#8801;</div>
+        <span class="group-toggle" id="gt_${gi}">
+          <span class="group-arr">${open?"▾":"▸"}</span>
+          ${editing
+            ? `<input id="gname_${gi}" class="group-name-input" value="${esc(g.name)}" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter')saveGroupName(${gi})">`
+            : `<span class="seq">S&eacute;ance ${gi+1}</span> &middot; ${esc(g.name)}`}
+          <span class="tick">${done}/${total}</span>
+        </span>
         <span class="group-edit" onclick="event.stopPropagation();editGroup(${gi})" title="Renommer / supprimer">&#9881;</span>
       </div>
       ${editing ? `<div class="group-actions">
@@ -356,7 +364,7 @@ function renderHome(){
       g.ex.forEach((e,ei)=>{
         const dn=loggedToday(e);
         html+=`<div class="row ${dn?"is-done":""}" id="row_${e.id}">
-          <div class="drag-handle" onpointerdown="startDrag(event,'${e.id}',${gi})">&#8801;</div>
+          <div class="drag-handle" id="de_${e.id}">&#8801;</div>
           <div class="meta" onclick="go('ex','${e.id}')"><div class="nm">${esc(e.name)}</div>
             <div class="tg">${dn?"✓ fait · ":""}${targetText(e)}</div></div>
           <div class="chev" onclick="go('ex','${e.id}')">›</div></div>`;
@@ -369,8 +377,26 @@ function renderHome(){
   html+=`<div class="empty" style="padding-top:6px">Maintiens <b>&#8801;</b> pour réordonner. &#9881; sur une séance pour la renommer ou supprimer.</div>
     <div class="reset" onclick="resetAll()">${confirmReset?"⚠ Confirmer ? Tout l'historique sera effacé":"↺ Réinitialiser le carnet"}</div></div>`;
   V.innerHTML=html;
-  // focus si en mode édition
+  // Attacher tous les listeners après rendu
+  S.groups.forEach((g,gi)=>{
+    // Toggle repli/dépli
+    const gt=document.getElementById('gt_'+gi);
+    if(gt) gt.addEventListener('click',function(ev){ev.stopPropagation();toggleGroup(gi);});
+    // Drag séance
+    const dg=document.getElementById('dg_'+gi);
+    if(dg) dg.addEventListener('pointerdown',function(ev){ev.stopPropagation();ev.preventDefault();startDragGroup(ev,gi);},{passive:false});
+    // Drag exercices
+    g.ex.forEach(e=>{
+      const de=document.getElementById('de_'+e.id);
+      if(de) de.addEventListener('pointerdown',function(ev){ev.stopPropagation();ev.preventDefault();startDrag(ev,e.id,gi);},{passive:false});
+    });
+  });
   if(S.editingGroup!=null){ const inp=document.getElementById('gname_'+S.editingGroup); if(inp){inp.focus();inp.select();} }
+}
+function toggleGroup(gi){
+  if(!S.collapsed) S.collapsed={};
+  S.collapsed[gi]=!S.collapsed[gi];
+  save(); renderHome();
 }
 function editGroup(gi){ S.editingGroup=gi; renderHome(); }
 function cancelEditGroup(){ S.editingGroup=null; renderHome(); }
@@ -390,7 +416,40 @@ function addGroup(){
   save(); renderHome();
 }
 /* ---- drag-to-reorder ---- */
-let drag={active:false};
+let dragG={active:false};
+function startDragGroup(ev,gi){
+  ev.stopPropagation(); ev.preventDefault();
+  const el=document.getElementById("grp_"+gi); if(!el) return;
+  const rect=el.getBoundingClientRect();
+  const startY=(ev.touches?ev.touches[0].clientY:ev.clientY);
+  dragG={active:true,gi,el,startY,origY:rect.top,origIdx:gi};
+  el.classList.add("dragging");
+  window.addEventListener("pointermove",onDragGroupMove,{passive:false});
+  window.addEventListener("pointerup",onDragGroupEnd);
+}
+function onDragGroupMove(ev){
+  if(!dragG.active) return; ev.preventDefault();
+  const y=(ev.touches?ev.touches[0].clientY:ev.clientY);
+  dragG.dy=y-dragG.startY;
+  dragG.el.style.transform=`translateY(${dragG.dy}px)`;
+}
+function onDragGroupEnd(){
+  if(!dragG.active) return;
+  dragG.el.classList.remove("dragging"); dragG.el.style.transform="";
+  window.removeEventListener("pointermove",onDragGroupMove);
+  window.removeEventListener("pointerup",onDragGroupEnd);
+  const fromIdx=dragG.origIdx;
+  const grpEls=S.groups.map((g,i)=>document.getElementById("grp_"+i)).filter(Boolean);
+  const dropY=dragG.origY+(dragG.dy||0)+dragG.el.offsetHeight/2;
+  let toIdx=fromIdx;
+  grpEls.forEach((r,i)=>{
+    const mid=r.getBoundingClientRect().top+r.offsetHeight/2;
+    if((dragG.dy||0)>0 && dropY>mid) toIdx=i;
+    if((dragG.dy||0)<0 && dropY<mid && i<toIdx) toIdx=i;
+  });
+  if(toIdx!==fromIdx){const[item]=S.groups.splice(fromIdx,1);S.groups.splice(toIdx,0,item);save();}
+  dragG.active=false; renderHome();
+}
 function startDrag(ev,id,gi){
   ev.stopPropagation(); ev.preventDefault();
   const el=document.getElementById("row_"+id); if(!el) return;
@@ -735,7 +794,13 @@ function resetAll(){
 (async function(){
   S = await store.get();
   if(!S || !S.groups){ S = defaults(); await store.set(S); }
-  S.view="home"; S.current=null; if(S.editingGroup==null) S.editingGroup=null; render();
+  S.view="home"; S.current=null; if(S.editingGroup==null) S.editingGroup=null;
+  // Nettoyer les anciens noms "Séance N · Xxx" → garder juste "Xxx"
+  S.groups.forEach(g=>{
+    g.name = g.name.replace(/^S[eé]ance\s*\d+\s*[·\-·]\s*/i,'').trim();
+    if(!g.name) g.name = "Séance";
+  });
+  save(); render();
 })();
 
 </script>

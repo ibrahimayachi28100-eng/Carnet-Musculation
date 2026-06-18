@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <style>
   :root{
@@ -64,6 +65,9 @@
   .addrow:active{background:var(--panel)}
   .reset{text-align:center;color:var(--ink-faint);font-size:12px;padding:24px 0 8px}
   .reset:active{color:#c0606a}
+  .deload-row{display:flex;gap:8px;margin-top:12px}
+  .btn.deload{flex:1;background:transparent;border:1px solid #3a6080;color:#6ab4dd;font-size:13px;font-weight:650;padding:14px 8px}
+  .btn.recycle{flex:1;background:transparent;border:1px solid #3a3226;color:#c0926a;font-size:13px;font-weight:650;padding:14px 8px}
   /* ---- detail ---- */
   .detail{padding:16px 16px 0}
   .hero{
@@ -333,16 +337,16 @@ function renderHome(){
       g.ex.forEach((e,ei)=>{
         const dn=loggedToday(e);
         html+=`<div class="row ${dn?"is-done":""}" id="row_${e.id}">
-          <div class="drag-handle" onpointerdown="startDrag(event,'${e.id}',${gi})">⠿</div>
+          <div class="drag-handle" onpointerdown="startDrag(event,'${e.id}',${gi})">&#8801;</div>
           <div class="meta" onclick="go('ex','${e.id}')"><div class="nm">${esc(e.name)}</div>
             <div class="tg">${dn?"✓ fait · ":""}${targetText(e)}</div></div>
           <div class="chev" onclick="go('ex','${e.id}')">›</div></div>`;
       });
-      html+=`<div class="addrow" onclick="addEx(${gi})">＋ Ajouter un exercice</div>`;
+      html+=`<div class="addrow" onclick="addEx(${gi})">+ Ajouter un exercice</div>`;
     }
     html+=`</div>`;
   });
-  html+=`<div class="empty" style="padding-top:6px">Maintiens <b>⠿</b> pour réordonner. Ouvre un exo → <b style="color:var(--forge)">Ajuster</b> la première fois, puis <b style="color:var(--forge)">Valider</b> chaque semaine.</div>
+  html+=`<div class="empty" style="padding-top:6px">Maintiens <b>&#8801;</b> pour réordonner. Ouvre un exo → <b style="color:var(--forge)">Ajuster</b> la première fois, puis <b style="color:var(--forge)">Valider</b> chaque semaine.</div>
     <div class="reset" onclick="resetAll()">${confirmReset?"⚠ Confirmer ? Tout l'historique sera effacé":"↺ Réinitialiser le carnet"}</div></div>`;
   V.innerHTML=html;
 }
@@ -407,6 +411,12 @@ function renderEx(){
       <button class="btn sec" onclick="openAdj('${e.id}')">Ajuster</button></div>`;
   }
   if(dn) html+=`<button class="btn ghost full" style="margin-top:8px" onclick="undoEx('${e.id}')">Annuler la dernière saisie</button>`;
+  if(e.scheme!=="free"){
+    html+=`<div class="deload-row">
+      <button class="btn deload" onclick="doDeload('${e.id}')">Deload (-30%)</button>
+      <button class="btn recycle" onclick="confirmRecycle('${e.id}')">Recycler (-20%)</button>
+    </div>`;
+  }
   html+=`<div id="adjPanel"></div>`;
   if(hist.length>=2){
     const useW=hist.some(h=>h.weight>0);
@@ -417,26 +427,35 @@ function renderEx(){
   else{
     html+=`<div class="hist">`;
     for(let i=hist.length-1;i>=0;i--){ const h=hist[i];
-      html+=`<div class="hrow"><div class="hd">${frDate(h.date)}</div>
+      const tag = h.deload ? ' style="border-color:#3a6080"' : (h.recycle ? ' style="border-color:#3a3226"' : '');
+      html+=`<div class="hrow"${tag}><div class="hd">${frDate(h.date)}</div>
         <div class="hp num">${esc(h.text)}</div>
-        ${h.weight>0?`<div class="he num">${fmt(h.e1rm)}</div>`:''}
+        ${h.weight>0 && !h.recycle?`<div class="he num">${fmt(h.e1rm)}</div>`:''}
         <div class="hr num">${h.rpe?('@'+h.rpe):''}</div></div>`;
     }
     html+=`</div>`;
   }
-  html+=`<a class="edit-link" onclick="go('edit','${e.id}')">⚙︎ Régler / renommer cet exercice</a></div>`;
+  html+=`<a class="edit-link" onclick="go('edit','${e.id}')">⚙ Régler / renommer cet exercice</a></div>`;
   V.innerHTML=html;
 }
 function heroSub(e,dn){
   if(e.scheme==="free") return dn?"":"Geste / gainage";
   if(e.scheme==="reps"){
     if(!e.weight && !e.history.length) return "Tape Ajuster pour fixer ta charge.";
-    if(dn) return "Bien. À la prochaine : +1 rep.";
+    if(dn){
+      const lastRpe = e.history.length? e.history[e.history.length-1].rpe : null;
+      if(lastRpe && lastRpe >= 9) return "RPE " + lastRpe + " — pense au Deload la semaine prochaine.";
+      return "Bien. À la prochaine : +1 rep.";
+    }
     if(e.currentReps>=e.repMax) return `Plafond reps → +${fmt(e.inc)}kg cette semaine.`;
     return `Objectif : ${e.repMax} reps avant +${fmt(e.inc)}kg`;
   }
   // migration
-  if(dn) return "Une série de plus migre vers le haut.";
+  if(dn){
+    const lastRpe = e.history.length? e.history[e.history.length-1].rpe : null;
+    if(lastRpe && lastRpe >= 9) return "RPE " + lastRpe + " — pense au Deload la semaine prochaine.";
+    return "Une série de plus migre vers le haut.";
+  }
   if(e.migBy==="reps") return `On migre les reps vers ${migNextVal(e)}, une série/semaine (leste fixe).`;
   return `On migre la charge vers ${fmt(migNextVal(e))}kg, une série/semaine.`;
 }
@@ -453,6 +472,65 @@ function quickValidate(id){
 }
 function undoEx(id){ const [e]=findEx(id); undoLast(e); toast("Annulé"); renderEx(); }
 
+/* ---- deload (-30%, mêmes séries/reps, migration suspendue) ---- */
+function doDeload(id){
+  const [e]=findEx(id);
+  if(loggedToday(e)){ toast("Déjà validé aujourd'hui"); return; }
+  const w = targetTopWeight(e);
+  const dw = round(Math.round((w * 0.7) / 2.5) * 2.5); // -30%, arrondi au 2.5 le plus proche
+  const reps = targetTopReps(e);
+  // Log la séance allégée SANS faire avancer la migration
+  e.history.push({
+    date: today(), scheme:e.scheme, migBy:e.migBy||null,
+    sets:e.sets, reps:reps, weight:dw, rpe:null,
+    e1rm: round(e1rm(dw, reps)),
+    text: `DELOAD ${e.sets}×${reps} @ ${fmt(dw)}kg`,
+    deload: true,
+    prev: snapshot(e)  // snapshot AVANT (rien ne change)
+  });
+  // On ne touche PAS à migBase, migSetsAtNext, currentReps, weight
+  save();
+  toast("Deload enregistré"); renderEx();
+}
+
+/* ---- recyclage (-20% du max atteint, nouveau cycle) ---- */
+function doRecycle(id){
+  const [e]=findEx(id);
+  if(loggedToday(e)){ toast("Déjà validé aujourd'hui"); return; }
+  // Trouver le max poids dans l'historique
+  let maxW = targetTopWeight(e);
+  for(const h of e.history){ if(h.weight > maxW) maxW = h.weight; }
+  const newBase = round(Math.round((maxW * 0.8) / 2.5) * 2.5); // -20%, arrondi au 2.5
+  // Log l'entrée de recyclage
+  e.history.push({
+    date: today(), scheme:e.scheme, migBy:e.migBy||null,
+    sets:e.sets, reps:0, weight:maxW, rpe:null,
+    e1rm: round(e1rm(maxW, targetTopReps(e))),
+    text: `RECYCLAGE ${fmt(maxW)} → ${fmt(newBase)}kg`,
+    recycle: true,
+    prev: snapshot(e)
+  });
+  // Reset le cycle
+  if(e.scheme==="migration"){
+    e.migBase = newBase;
+    e.migSetsAtNext = 0;
+    e.sets = 4;
+  } else if(e.scheme==="reps"){
+    e.weight = newBase;
+    e.currentReps = e.repMin;
+    e.sets = 4;
+  }
+  save();
+  toast("Recyclage → " + fmt(newBase) + "kg"); renderEx();
+}
+let recycleConfirm=null;
+function confirmRecycle(id){
+  if(recycleConfirm===id){ doRecycle(id); recycleConfirm=null; return; }
+  recycleConfirm=id;
+  toast("Tape encore pour confirmer");
+  setTimeout(()=>{recycleConfirm=null;},3000);
+}
+
 /* ---- ajustement ---- */
 function openAdj(id){
   const [e]=findEx(id);
@@ -464,7 +542,7 @@ function openAdj(id){
 function stepHTML(label,key,val,step,id){
   return `<div class="field"><span>${label}</span>
     <div class="stepper">
-      <button onclick="adjStep('${key}',${-step},'${id}')">−</button>
+      <button onclick="adjStep('${key}',${-step},'${id}')">-</button>
       <input class="val num" inputmode="decimal" value="${fmt(val)}" onfocus="this.select()" onchange="adjSet('${key}',this.value,'${id}')">
       <button onclick="adjStep('${key}',${step},'${id}')">+</button></div></div>`;
 }

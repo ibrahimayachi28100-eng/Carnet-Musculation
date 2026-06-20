@@ -770,9 +770,13 @@ function renderEx(){
   let chartHtml="";
   if(realSessions.length>=2){
     const useW=realSessions.some(h=>h.weight>0);
+    const isMig=(e.psMode==="migration");
     const last=realSessions[realSessions.length-1];
-    const lastTxt = last.weight>0 ? `${last.sets}×${last.reps} @ ${fmt(last.weight)}kg · 1RM ~ ${fmt(last.e1rm)}kg` : `${last.sets}×${last.reps}`;
-    chartHtml += `<div class="sec-title">Progression — ${useW?'1RM estimé':'reps'}</div>`;
+    let lastTxt, axisLabel;
+    if(!useW){ lastTxt=`${last.sets}×${last.reps}`; axisLabel="reps"; }
+    else if(isMig){ lastTxt=`${last.sets}×${last.reps} @ ${fmt(last.weight)}kg · 1RM ~ ${fmt(last.e1rm)}kg`; axisLabel="1RM estimé"; }
+    else { lastTxt=`${last.sets}×${last.reps} @ ${fmt(last.weight)}kg`; axisLabel="charge × reps"; }
+    chartHtml += `<div class="sec-title">Progression — ${axisLabel}</div>`;
     chartHtml += `<div class="chart-head">${lastTxt}</div>`;
     chartHtml += progressChart(e);
   }
@@ -806,7 +810,7 @@ function renderEx(){
           const clickable = (!h.recycle) ? ` onclick="editHist('${e.id}',${gi})" style="cursor:pointer"` : '';
           html+=`<div class="hrow"${tag}${clickable}><div class="hd">${frDate(h.date)}</div>
             <div class="hp num">${h.pr?'<span class="pr-star">⭐</span> ':''}${esc(h.text)}</div>
-            ${h.weight>0 && !h.recycle?`<div class="he num">1RM ~ ${fmt(h.e1rm)} kg</div>`:''}
+            ${h.weight>0 && !h.recycle && e.psMode==="migration"?`<div class="he num">1RM ~ ${fmt(h.e1rm)} kg</div>`:''}
             ${rpeCell}</div>`;
         }
         html+=`</div>`;
@@ -1069,7 +1073,8 @@ function progressChart(e){
   // Points = toutes les séances réelles (normales + deload), hors marqueurs recycle
   const pts = e.history.filter(h=>!h.recycle);
   const useW = pts.some(h=>h.weight>0);
-  const vals = pts.map(h=> useW ? h.e1rm : h.reps);
+  const useE1rm = (e.psMode==="migration"); // 1RM valide seulement en migration charge (reps ~fixes)
+  const vals = pts.map(h=> !useW ? h.reps : (useE1rm ? h.e1rm : (h.weight*h.reps)));
   const n = vals.length;
   const min=Math.min(...vals), max=Math.max(...vals);
   const pad=(max-min)*0.12||1, lo=min-pad, hi=max+pad;

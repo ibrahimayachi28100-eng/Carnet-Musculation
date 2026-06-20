@@ -33,6 +33,8 @@
   header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px;line-height:1.1}
   header .date{font-size:12px;color:var(--ink-dim);margin-top:2px;text-transform:capitalize}
   header .gear{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-size:18px;display:none;align-items:center;justify-content:center;flex:0 0 auto}
+  header .plus{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--ink-dim);font-size:22px;font-weight:600;display:none;align-items:center;justify-content:center;flex:0 0 auto;margin-right:8px}
+  header .plus:active{background:var(--forge);color:#10130f}
   .prev{font-size:11px;color:var(--ink-faint);padding:6px 0 2px}
   /* ---- séance group ---- */
   .wrap{padding:14px 14px 0}
@@ -84,6 +86,18 @@
   .btn-ga.cancel{background:transparent;color:var(--ink-dim)}
   .addgroup{display:flex;align-items:center;justify-content:center;border:1px dashed var(--forge-soft);border-radius:14px;padding:16px;margin:4px 0 18px;color:var(--forge);font-size:14px;font-weight:650;opacity:0.7}
   .addgroup:active{opacity:1;background:var(--forge-soft)}
+  .hero-pr{margin-top:10px;font-size:12px;color:#e0b34a;font-weight:650;font-variant-numeric:tabular-nums}
+  .pr-star{font-size:11px}
+  .io-row{display:flex;gap:8px;margin:14px 0 4px}
+  .io-btn{flex:1;background:transparent;border:1px solid var(--line);color:var(--ink-dim);border-radius:12px;padding:13px 8px;font-size:13px;font-weight:600}
+  .io-btn:active{background:var(--panel)}
+  .io-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:18px}
+  .io-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;max-width:480px;width:100%}
+  .io-card h3{margin:0 0 8px;font-size:15px}
+  .io-note{font-size:12px;color:var(--ink-dim);margin:0 0 12px;line-height:1.4}
+  .io-text{width:100%;height:120px;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px;font-size:11px;font-family:monospace;resize:none}
+  .io-actions{margin-top:12px}
+  .io-actions .btn{margin-top:8px}
   /* ---- detail ---- */
   .detail{padding:16px 16px 0}
   .hero{
@@ -127,11 +141,31 @@
   .rpe .rpe-v{font-size:13px;font-weight:700}
   .rpe .rpe-r{font-size:10px;opacity:0.7;font-weight:600}
   .rpe button.on .rpe-r{opacity:0.85}
-  .rpe-legend{font-size:10px;color:var(--ink-faint);margin-bottom:4px}
+  .e1rm-label{font-size:9px;opacity:0.6;font-weight:500;margin-left:2px}
+  .ps-session{margin-top:4px;display:flex;flex-direction:column;gap:8px}
+  .ps-row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 12px;transition:border-color .2s}
+  .ps-row.done{border-color:var(--forge);background:var(--forge-soft)}
+  .ps-n{font-size:13px;font-weight:800;color:var(--ink-dim);width:26px;flex-shrink:0}
+  .ps-row.done .ps-n{color:var(--forge)}
+  .ps-steppers{display:flex;gap:8px;flex:1;justify-content:center}
+  .ps-step{display:flex;align-items:center;gap:6px}
+  .ps-step button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ps-step button:active{background:var(--forge);color:#10130f}
+  .ps-val{display:flex;flex-direction:column;align-items:center;min-width:38px;line-height:1.1}
+  .ps-val b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+  .ps-val span{font-size:9px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em}
+  .ps-check{width:54px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink-faint);font-size:11px;font-weight:700;flex-shrink:0}
+  .ps-check.on{background:var(--forge);color:#10130f;border-color:var(--forge);font-size:18px}
+  .ps-rpe-wrap{margin-top:6px}
+  .btn.dim{opacity:.55}
   /* history */
   .sec-title{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:22px 4px 10px}
   .chart{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 12px 8px}
   .chart .cap{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-faint);padding:0 2px}
+  .chart-head{font-size:13px;color:var(--ink-dim);font-weight:600;margin:-2px 0 8px;font-variant-numeric:tabular-nums}
+  .chart-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px;font-size:10px;color:var(--ink-faint)}
+  .chart-legend span{display:flex;align-items:center;gap:5px}
+  .chart-legend i{display:inline-block;width:14px;height:3px;border-radius:2px}
   .hist{margin-top:10px}
   .cycle-block{margin-bottom:10px}
   .cycle-head{display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;cursor:pointer;user-select:none}
@@ -161,6 +195,7 @@
     <h1 id="title">Carnet de force</h1>
     <div class="date" id="hdate"></div>
   </div>
+  <button class="plus" id="plus" onclick="plusClick()">+</button>
   <button class="gear" id="gear" onclick="gearClick()">⚙</button>
 </header>
 
@@ -193,6 +228,28 @@ const store = {
      "migration" -> une série migre par semaine. migBy="weight" (charge monte) ou "reps" (reps montent)
      "free"      -> simple validation
    ============================================================ */
+function convertSchemes(S){
+  // Convertit tous les exercices reps/migration en série par série (perset)
+  S.groups.forEach(g=>{
+    g.ex.forEach(e=>{
+      if(e.scheme==="perset" || e.scheme==="free") return;
+      const sets = e.sets||4;
+      if(e.scheme==="reps"){
+        e.psMode="reps";
+        e.repMin=e.repMin||8; e.repMax=e.repMax||20; e.inc=e.inc||2;
+        const w=e.weight||0, rt=Math.min(e.repMax, e.currentReps||e.repMin);
+        e.series=Array.from({length:sets},()=>({weight:w, repTarget:rt}));
+      } else {
+        e.psMode="migration";
+        e.prescribedReps=e.migFix||10; e.inc=e.inc||2.5;
+        const base=e.migBase||0, at=Math.min(e.migSetsAtNext||0, sets), next=round(base+(e.inc||2.5));
+        e.series=Array.from({length:sets},(_,i)=>({weight: i<at?next:base, repTarget:e.prescribedReps}));
+      }
+      e.scheme="perset"; e.migBy=null;
+    });
+  });
+  return S;
+}
 function defaults(){
   // reps simple : 4x10, charge 0 (= à régler / PdC)
   const R=(name)=>({id:uid(),name,scheme:"reps",sets:4,repMin:8,repMax:20,weight:0,inc:2,currentReps:10,history:[]});
@@ -242,7 +299,7 @@ function defaults(){
 /* ============================================================
    UTILITAIRES
    ============================================================ */
-let S=null, adjState=null, confirmReset=false;
+let S=null, adjState=null, confirmReset=false, psSession=null, psForceNew=false;
 function uid(){return Math.random().toString(36).slice(2,9)}
 function fmt(n){ if(n==null) return ""; return (Math.round(n*100)/100).toString(); }
 function round(n){ return Math.round(n*100)/100; }
@@ -257,6 +314,7 @@ function migNextVal(e){ return round(e.migBase + e.inc); }
 /* ---- cible affichée ---- */
 function targetText(e){
   if(e.scheme==="free") return "À valider";
+  if(e.scheme==="perset"){ return e.series&&e.series.length? persetText(e.series).replace(/(\d+)×(\d+)/g,'$1×<b>$2</b>') : "À configurer"; }
   if(e.scheme==="reps"){
     const w = e.weight? ` @ <b>${fmt(e.weight)}</b>kg` : "";
     return `${e.sets}×<b>${e.currentReps}</b>${w}`;
@@ -277,11 +335,13 @@ function targetText(e){
 function targetPlain(e){ return targetText(e).replace(/<\/?b>/g,""); }
 function targetTopWeight(e){
   if(e.scheme==="reps") return e.weight;
+  if(e.scheme==="perset") return persetTopWP(e).weight;
   if(e.scheme==="migration"){ if(e.migBy==="reps") return e.migFix; return (e.migSetsAtNext>0)? migNextVal(e) : e.migBase; }
   return 0;
 }
 function targetTopReps(e){
   if(e.scheme==="reps") return e.currentReps;
+  if(e.scheme==="perset") return persetTopWP(e).reps || e.prescribedReps || 10;
   if(e.scheme==="migration"){ if(e.migBy==="reps") return (e.migSetsAtNext>0)? migNextVal(e) : e.migBase; return e.migFix; }
   return 0;
 }
@@ -294,15 +354,28 @@ function loggedToday(e){ const h=e.history; return h.length && h[h.length-1].dat
 function validate(e, p, rpe){   // p: {sets, reps, weight}
   if(e.cycle==null) e.cycle=1;
   if(e.cycleSess==null) e.cycleSess=0;
+  const snap = snapshot(e);   // capture l'état AVANT toute modification
   e.cycleSess++;
+  // Détection record perso : charge jamais atteinte à reps >= cette rep
+  let isPR=false;
+  if(p.weight>0 || p.reps>0){
+    let prevBest=0;
+    for(const h of e.history){
+      if(h.recycle||h.deload) continue;
+      // un record antérieur "couvre" cette perf si charge ET reps >= la nouvelle
+      if((h.weight||0) >= p.weight && (h.reps||0) >= p.reps) prevBest=1;
+    }
+    if(!prevBest && e.history.some(h=>!h.recycle&&!h.deload)) isPR=true;
+  }
   e.history.push({
     date: today(), scheme:e.scheme, migBy:e.migBy||null,
     sets:p.sets, reps:p.reps, weight:p.weight, rpe:rpe||null,
     e1rm: round(e1rm(p.weight, p.reps)),
     text: sessionText(e,p),
-    cycle:e.cycle, cycleSess:e.cycleSess,
-    prev: snapshot(e)
+    cycle:e.cycle, cycleSess:e.cycleSess, pr:isPR,
+    prev: snap
   });
+  if(isPR) setTimeout(()=>toast("⭐ Record perso !"),200);
   if(e.scheme==="reps"){
     if(p.reps>=e.repMax){ e.weight=round(p.weight+e.inc); e.currentReps=e.repMin; }
     else { e.weight=p.weight; e.currentReps=Math.min(e.repMax, p.reps+1); }
@@ -312,6 +385,91 @@ function validate(e, p, rpe){   // p: {sets, reps, weight}
   }
   save();
 }
+/* ===== MODE SÉRIE PAR SÉRIE (perset) ===== */
+function persetComputeNext(e, achieved){
+  if(e.psMode==="reps") return persetNextReps(e, achieved);
+  return persetNextMigration(e, achieved);
+}
+function persetNextMigration(e, achieved){
+  const P = e.prescribedReps;
+  const next = achieved.map((a)=>{
+    let rt = (a.reps >= P) ? P : Math.min(P, a.reps + 1);
+    return {weight:a.weight, repTarget:rt};
+  });
+  const allFull = achieved.every(a=>a.reps >= P);
+  const manuallyAdvanced = achieved.some((a,i)=> a.weight > (e.series[i]?e.series[i].weight:0));
+  if(allFull && !manuallyAdvanced){
+    const minW = Math.min(...next.map(s=>s.weight));
+    const idx = next.findIndex(s=>s.weight===minW);
+    next[idx] = {weight: round(minW + e.inc), repTarget: P};
+  }
+  return next;
+}
+function persetNextReps(e, achieved){
+  const repMin=e.repMin, repMax=e.repMax, inc=e.inc;
+  const reps = achieved.map(a=>a.reps);
+  const minR = Math.min(...reps), maxR = Math.max(...reps);
+  const homogeneous = (minR === maxR);
+  let target;
+  if(homogeneous){
+    // toutes les séries au même nombre → le palier avance depuis ce que tu as FAIT
+    if(minR >= repMax){
+      // plafond atteint → +charge, retour aux reps mini
+      return achieved.map(a=>({weight: round(a.weight+inc), repTarget: repMin}));
+    }
+    target = minR + 1;
+  } else {
+    // séries inégales → la cible reste le haut atteint, tu grattes le retard (toi, pas l'app)
+    target = Math.min(maxR, repMax);
+  }
+  return achieved.map(a=>({weight:a.weight, repTarget:target}));
+}
+function persetTopWP(e){
+  // série la plus lourde (pour 1RM/PR) parmi les cibles actuelles
+  let w=0,r=0; (e.series||[]).forEach(s=>{ if(s.weight>w||(s.weight===w&&s.repTarget>r)){w=s.weight;r=s.repTarget;} });
+  return {weight:w, reps:r};
+}
+function persetText(series){
+  // regroupe les séries identiques : "2×10 @ 12kg + 2×10 @ 10kg"
+  const groups=[];
+  series.forEach(s=>{
+    const key=`${s.repTarget}@${s.weight}`;
+    const g=groups.find(x=>x.key===key);
+    if(g) g.n++; else groups.push({key, n:1, reps:s.repTarget, weight:s.weight});
+  });
+  return groups.map(g=>{
+    const w = g.weight>0 ? ` @ ${fmt(g.weight)}kg` : " PdC";
+    return `${g.n}×${g.reps}${w}`;
+  }).join(" + ");
+}
+function persetFinish(e, achieved, rpe){
+  if(e.cycle==null) e.cycle=1;
+  if(e.cycleSess==null) e.cycleSess=0;
+  const snap = snapshot(e);
+  e.cycleSess++;
+  const top = {weight:0, reps:0};
+  achieved.forEach(a=>{ if(a.weight>top.weight||(a.weight===top.weight&&a.reps>top.reps)){top.weight=a.weight;top.reps=a.reps;} });
+  // PR : charge×reps jamais atteinte
+  let isPR=false;
+  let covered=false, hadReal=false;
+  for(const h of e.history){
+    if(h.recycle||h.deload) continue; hadReal=true;
+    if((h.weight||0)>=top.weight && (h.reps||0)>=top.reps) covered=true;
+  }
+  if(hadReal && !covered && (top.weight>0||top.reps>0)) isPR=true;
+  e.history.push({
+    date:today(), scheme:"perset",
+    sets:achieved.length, reps:top.reps, weight:top.weight, rpe:rpe||null,
+    e1rm: round(e1rm(top.weight, top.reps)),
+    text: persetText(achieved.map(a=>({repTarget:a.reps, weight:a.weight}))),
+    detail: achieved.map(a=>({reps:a.reps,weight:a.weight})),
+    cycle:e.cycle, cycleSess:e.cycleSess, pr:isPR, prev:snap
+  });
+  if(isPR) setTimeout(()=>toast("⭐ Record perso !"),200);
+  e.series = persetComputeNext(e, achieved);
+  save();
+}
+
 function sessionText(e,p){
   if(e.scheme==="free") return "Fait";
   if(e.scheme==="reps"){ const w=p.weight? ` @ ${fmt(p.weight)}kg`:""; return `${p.sets}×${p.reps}${w}`; }
@@ -326,12 +484,15 @@ function sessionText(e,p){
     return parts.join(" + ");
   }
 }
-function snapshot(e){ return {sets:e.sets,weight:e.weight,currentReps:e.currentReps,migBase:e.migBase,migFix:e.migFix,migSetsAtNext:e.migSetsAtNext}; }
+function snapshot(e){ return {sets:e.sets,weight:e.weight,currentReps:e.currentReps,migBase:e.migBase,migFix:e.migFix,migSetsAtNext:e.migSetsAtNext,cycle:e.cycle,cycleSess:e.cycleSess,series:e.series?JSON.parse(JSON.stringify(e.series)):null}; }
 function undoLast(e){
   const last=e.history.pop(); if(!last) return; const p=last.prev||{};
   if(p.sets!=null) e.sets=p.sets;
+  if(p.cycle!=null) e.cycle=p.cycle;
+  if(p.cycleSess!=null) e.cycleSess=p.cycleSess;
   if(e.scheme==="reps"){ e.weight=p.weight; e.currentReps=p.currentReps; }
   else if(e.scheme==="migration"){ e.migBase=p.migBase; e.migFix=p.migFix; e.migSetsAtNext=p.migSetsAtNext; }
+  else if(e.scheme==="perset"){ if(p.series) e.series=JSON.parse(JSON.stringify(p.series)); }
   save();
 }
 
@@ -339,13 +500,17 @@ function undoLast(e){
    RENDU
    ============================================================ */
 const V=document.getElementById('view');
-function go(view,id){ S.view=view; S.current=id||null; save(); render(); window.scrollTo(0,0); }
+function go(view,id){ psForceNew=false; psSession=null; S.view=view; S.current=id||null; save(); render(); window.scrollTo(0,0); }
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1400); }
 function gearClick(){ if(S.current) go('edit',S.current); }
+function plusClick(){ if(S.current) psNewSession(S.current); }
 
 function render(){
   document.getElementById('hdate').textContent = frDate();
-  const back=document.getElementById('back'), gear=document.getElementById('gear');
+  const back=document.getElementById('back'), gear=document.getElementById('gear'), plus=document.getElementById('plus');
+  const exr = S.current?findEx(S.current):null;
+  const showPlus = (S.view==="ex" && exr && exr[0] && exr[0].scheme==="perset");
+  if(plus) plus.style.display = showPlus ? "flex" : "none";
   if(S.view==="home"){ back.style.display="none"; gear.style.display="none"; document.getElementById('title').textContent="Carnet de force"; renderHome(); }
   else if(S.view==="ex"){ back.style.display="flex"; gear.style.display="flex"; renderEx(); }
   else if(S.view==="edit"){ back.style.display="flex"; gear.style.display="none"; renderEdit(); }
@@ -395,6 +560,10 @@ function renderHome(){
     html+=`</div>`;
   });
   html+=`<div class="addgroup" onclick="addGroup()">+ Ajouter une séance</div>`;
+  html+=`<div class="io-row">
+    <button class="io-btn" onclick="exportData()">⤓ Exporter mes données</button>
+    <button class="io-btn" onclick="importData()">⤒ Importer</button>
+  </div>`;
   html+=`<div class="empty" style="padding-top:6px">Maintiens <b>&#8801;</b> pour réordonner. &#9881; sur une séance pour la renommer ou supprimer.</div>
     <div class="reset" onclick="resetAll()">${confirmReset?"⚠ Confirmer ? Tout l'historique sera effacé":"↺ Réinitialiser le carnet"}</div></div>`;
   V.innerHTML=html;
@@ -507,18 +676,81 @@ function onDragEnd(){
   drag.active=false; renderHome();
 }
 
+function persetSessionHTML(e){
+  if(!psSession || psSession.exId!==e.id){
+    psSession={exId:e.id, rows:(e.series||[]).map(s=>({reps:s.repTarget, weight:s.weight, done:false})), rpe:null};
+  }
+  const rows = psSession.rows.map((r,i)=>`
+    <div class="ps-row ${r.done?'done':''}">
+      <div class="ps-n">S${i+1}</div>
+      <div class="ps-steppers">
+        <div class="ps-step">
+          <button onclick="psStep(${i},'reps',-1)">−</button>
+          <div class="ps-val"><b>${r.reps}</b><span>reps</span></div>
+          <button onclick="psStep(${i},'reps',1)">+</button>
+        </div>
+        <div class="ps-step">
+          <button onclick="psStep(${i},'weight',-1)">−</button>
+          <div class="ps-val"><b>${fmt(r.weight)}</b><span>kg</span></div>
+          <button onclick="psStep(${i},'weight',1)">+</button>
+        </div>
+      </div>
+      <button class="ps-check ${r.done?'on':''}" onclick="psToggle(${i})">${r.done?'✓':'valider'}</button>
+    </div>`).join('');
+  const allDone = psSession.rows.length>0 && psSession.rows.every(r=>r.done);
+  const rmap={6:"+4",7:"+3","7.5":"+2",8:"+2","8.5":"+1",9:"+1","9.5":"½",10:"0"};
+  const rpeBtns=[6,7,8,8.5,9,9.5,10].map(v=>
+    `<button class="${psSession.rpe===v?'on':''}" onclick="psRpe(${v})"><span class="rpe-v">${v}</span><span class="rpe-r">${rmap[v]}</span></button>`).join('');
+  return `<div class="ps-session">
+    ${rows}
+    <div class="ps-rpe-wrap">
+      <span class="rpe-legend">Effort sur ta série la plus dure (reps en réserve)</span>
+      <div class="rpe">${rpeBtns}</div>
+    </div>
+    <button class="btn full ${allDone?'':'dim'}" onclick="psFinish('${e.id}')">Terminer la séance${allDone?'':' (valide tes séries)'}</button>
+  </div>`;
+}
+function psStep(i, field, delta){
+  const [e]=findEx(psSession.exId); if(!e) return;
+  const r=psSession.rows[i]; if(!r) return;
+  if(field==='reps') r.reps=Math.max(0, r.reps+delta);
+  else { const step=e.inc||2.5; r.weight=Math.max(0, round(r.weight+delta*step)); }
+  renderEx();
+}
+function psToggle(i){ const r=psSession.rows[i]; if(r) r.done=!r.done; renderEx(); }
+function psRpe(v){ psSession.rpe=(psSession.rpe===v?null:v); renderEx(); }
+function psNewSession(id){ psForceNew=true; psSession=null; renderEx(); }
+function psFinish(id){
+  const [e]=findEx(id); if(!e) return;
+  if(loggedToday(e) && !psForceNew){ toast("Déjà validé aujourd'hui"); return; }
+  if(!psSession.rows.every(r=>r.done)){ toast("Valide chaque série d'abord"); return; }
+  const achieved=psSession.rows.map(r=>({reps:r.reps, weight:r.weight}));
+  persetFinish(e, achieved, psSession.rpe);
+  psSession=null; psForceNew=false;
+  renderEx();
+}
+
 function renderEx(){
   const [e]=findEx(S.current); if(!e){ go('home'); return; }
   document.getElementById('title').textContent=e.name;
   const dn=loggedToday(e);
   const hist=e.history.slice(-10);
   let html=`<div class="detail">`;
-  const cyc = (e.scheme!=="free") ? ` &middot; Cycle ${e.cycle||1} · séance ${ (e.cycleSess||0)+1 }` : '';
+  const sessNum = dn ? (e.cycleSess||0) : (e.cycleSess||0)+1;
+  const cyc = (e.scheme!=="free") ? ` &middot; Cycle ${e.cycle||1} &middot; séance ${sessNum}` : '';
+  const pr = bestPR(e);
   html+=`<div class="hero" id="hero">
     <div class="lbl">${dn?'Validé · prochaine cible':'Cible du jour'}${cyc}</div>
     <div class="big">${targetText(e)}</div>
-    <div class="sub">${heroSub(e,dn)}</div></div>`;
-  if(e.scheme==="free"){
+    <div class="sub">${heroSub(e,dn)}</div>
+    ${pr?`<div class="hero-pr">⭐ Record : ${esc(pr)}</div>`:''}</div>`;
+  if(e.scheme==="perset"){
+    if(dn && !psForceNew){
+      html+=`<div class="cta"><button class="btn done" disabled>✓ Séance validée</button></div>`;
+    } else {
+      html+=persetSessionHTML(e);
+    }
+  } else if(e.scheme==="free"){
     html+=`<div class="cta"><button class="btn ${dn?'done':''}" onclick="quickValidate('${e.id}')">${dn?'✓ Validé':'Valider'}</button></div>`;
   } else {
     html+=`<div class="cta">
@@ -533,9 +765,15 @@ function renderEx(){
     </div>`;
   }
   html+=`<div id="adjPanel"></div>`;
-  if(hist.length>=2){
-    const useW=hist.some(h=>h.weight>0);
-    html+=`<div class="sec-title">Progression — ${useW?'1RM estimé':'reps'}</div>${sparkline(hist)}`;
+  const realSessions = e.history.filter(h=>!h.recycle);
+  let chartHtml="";
+  if(realSessions.length>=2){
+    const useW=realSessions.some(h=>h.weight>0);
+    const last=realSessions[realSessions.length-1];
+    const lastTxt = last.weight>0 ? `${last.sets}×${last.reps} @ ${fmt(last.weight)}kg · 1RM ~ ${fmt(last.e1rm)}kg` : `${last.sets}×${last.reps}`;
+    chartHtml += `<div class="sec-title">Progression — ${useW?'1RM estimé':'reps'}</div>`;
+    chartHtml += `<div class="chart-head">${lastTxt}</div>`;
+    chartHtml += progressChart(e);
   }
   html+=`<div class="sec-title">Historique par cycle</div>`;
   if(!e.history.length){ html+=`<div class="empty">Rien d'enregistré. Tape <b style="color:var(--forge)">Ajuster</b> pour ta première saisie.</div>`; }
@@ -563,8 +801,8 @@ function renderEx(){
         for(let i=sessions.length-1;i>=0;i--){ const h=sessions[i];
           const tag = h.deload ? ' style="border-color:#3a6080"' : (h.recycle ? ' style="border-color:#3a3226"' : '');
           html+=`<div class="hrow"${tag}><div class="hd">${frDate(h.date)}</div>
-            <div class="hp num">${esc(h.text)}</div>
-            ${h.weight>0 && !h.recycle?`<div class="he num">${fmt(h.e1rm)}</div>`:''}
+            <div class="hp num">${h.pr?'<span class="pr-star">⭐</span> ':''}${esc(h.text)}</div>
+            ${h.weight>0 && !h.recycle?`<div class="he num">1RM ~ ${fmt(h.e1rm)} kg</div>`:''}
             <div class="hr num">${h.rpe?('@'+h.rpe):''}</div></div>`;
         }
         html+=`</div>`;
@@ -572,11 +810,32 @@ function renderEx(){
       html+=`</div>`;
     });
   }
+  if(chartHtml) html+=chartHtml;
   html+=`<a class="edit-link" onclick="go('edit','${e.id}')">⚙ Régler / renommer cet exercice</a></div>`;
   V.innerHTML=html;
 }
+function bestPR(e){
+  let best=null;
+  for(const h of e.history){
+    if(h.recycle||h.deload) continue;
+    if(!best) { best=h; continue; }
+    // meilleur = charge supérieure, ou charge égale + reps supérieures
+    if((h.weight||0) > (best.weight||0) ||
+       ((h.weight||0)===(best.weight||0) && (h.reps||0) > (best.reps||0))) best=h;
+  }
+  if(!best) return null;
+  if(best.weight>0) return `${best.sets}×${best.reps} @ ${fmt(best.weight)}kg`;
+  return `${best.sets}×${best.reps}`;
+}
 function heroSub(e,dn){
   if(e.scheme==="free") return dn?"":"Geste / gainage";
+  if(e.scheme==="perset"){
+    const lastRpe = e.history.length? e.history[e.history.length-1].rpe : null;
+    if(dn && lastRpe && lastRpe>=9) return "RPE "+lastRpe+" — pense au Deload la semaine prochaine.";
+    if(dn) return "Séance validée série par série.";
+    if(e.psMode==="reps") return `Reps montent ${e.repMin}→${e.repMax}, puis +${fmt(e.inc)}kg. Valide chaque série.`;
+    return `Toutes séries pleines → une série monte de +${fmt(e.inc)}kg. Valide chaque série.`;
+  }
   if(e.scheme==="reps"){
     if(!e.weight && !e.history.length) return "Tape Ajuster pour fixer ta charge.";
     if(dn){
@@ -627,6 +886,7 @@ function doDeload(id){
   const reps = targetTopReps(e);
   if(e.cycle==null) e.cycle=1;
   if(e.cycleSess==null) e.cycleSess=0;
+  const snap = snapshot(e);
   e.cycleSess++;
   // Log la séance allégée SANS faire avancer la migration
   e.history.push({
@@ -635,9 +895,10 @@ function doDeload(id){
     e1rm: round(e1rm(dw, reps)),
     text: `DELOAD ${e.sets}×${reps} @ ${fmt(dw)}kg`,
     deload: true, cycle:e.cycle, cycleSess:e.cycleSess,
-    prev: snapshot(e)  // snapshot AVANT (rien ne change)
+    prev: snap
   });
-  // On ne touche PAS à migBase, migSetsAtNext, currentReps, weight
+  // On ne touche PAS à l'état de progression (migBase, series, etc.) :
+  // le deload est une séance allégée journalisée, la cible reprend ensuite où elle était.
   save();
   toast("Deload enregistré"); renderEx();
 }
@@ -673,6 +934,10 @@ function doRecycle(id){
     e.weight = newBase;
     e.currentReps = e.repMin;
     e.sets = 4;
+  } else if(e.scheme==="perset"){
+    const n = (e.series&&e.series.length)||4;
+    const rt = e.psMode==="reps" ? (e.repMin||10) : (e.prescribedReps||10);
+    e.series = Array.from({length:n}, ()=>({weight:newBase, repTarget:rt}));
   }
   save();
   toast("Recyclage → " + fmt(newBase) + "kg"); renderEx();
@@ -774,55 +1039,107 @@ function confirmAdj(id){
 }
 
 /* ---- sparkline ---- */
-function sparkline(hist){
-  const useW = hist.some(h=>h.weight>0);
-  const vals = hist.map(h=> useW? h.e1rm : h.reps);
-  const min=Math.min(...vals), max=Math.max(...vals), pad=(max-min)*0.15||1;
-  const lo=min-pad, hi=max+pad, W=480,H=110,L=8,R=8,T=14,B=18;
-  const x=i=> L + i*(W-L-R)/Math.max(1,vals.length-1);
+function progressChart(e){
+  // Points = toutes les séances réelles (normales + deload), hors marqueurs recycle
+  const pts = e.history.filter(h=>!h.recycle);
+  const useW = pts.some(h=>h.weight>0);
+  const vals = pts.map(h=> useW ? h.e1rm : h.reps);
+  const n = vals.length;
+  const min=Math.min(...vals), max=Math.max(...vals);
+  const pad=(max-min)*0.12||1, lo=min-pad, hi=max+pad;
+  const W=600,H=190,L=10,R=12,T=16,B=26;
+  const x=i=> L + i*(W-L-R)/Math.max(1,n-1);
   const y=v=> T + (H-T-B)*(1-(v-lo)/(hi-lo));
-  const path=vals.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
-  const dots=vals.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.2" fill="var(--forge)"/>`).join('');
-  const area=`${path} L${x(vals.length-1).toFixed(1)} ${H-B} L${x(0).toFixed(1)} ${H-B} Z`;
-  return `<div class="chart"><div class="cap"><span>${frDate(hist[0].date)}</span><span>${frDate(hist[hist.length-1].date)}</span></div>
-    <svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="display:block;margin-top:4px">
-      <path d="${area}" fill="var(--forge-soft)" opacity=".55"/>
-      <path d="${path}" fill="none" stroke="var(--forge)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>
-    <div class="cap"><span>${fmt(vals[0])}</span><span style="color:var(--forge)">${fmt(vals[vals.length-1])} ${useW?'kg 1RMe':'reps'}</span></div></div>`;
+
+  // Couleurs alternées par cycle
+  const cyColors=["var(--forge)","#5b8fb0"]; // orange / bleu acier
+  const colorFor=c=> cyColors[((c||1)-1)%2];
+
+  // Segmenter par cycle (points consécutifs de même cycle)
+  let segs=[], cur=null;
+  pts.forEach((h,i)=>{
+    const c=h.cycle||1;
+    if(!cur||cur.cycle!==c){ cur={cycle:c, pts:[]}; segs.push(cur); }
+    cur.pts.push({i, v:vals[i], h});
+  });
+
+  // Tracé de chaque segment de cycle
+  let paths="";
+  segs.forEach(s=>{
+    if(s.pts.length<1) return;
+    const d=s.pts.map((p,k)=>`${k?'L':'M'}${x(p.i).toFixed(1)} ${y(p.v).toFixed(1)}`).join(' ');
+    paths+=`<path d="${d}" fill="none" stroke="${colorFor(s.cycle)}" stroke-width="${n>40?1.8:2.4}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+
+  // Connexion entre cycles = chute de recyclage (pointillé gris)
+  let drops="";
+  for(let s=1;s<segs.length;s++){
+    const prev=segs[s-1].pts[segs[s-1].pts.length-1];
+    const next=segs[s].pts[0];
+    drops+=`<path d="M${x(prev.i).toFixed(1)} ${y(prev.v).toFixed(1)} L${x(next.i).toFixed(1)} ${y(next.v).toFixed(1)}" fill="none" stroke="var(--ink-faint)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.5"/>`;
+  }
+
+  // Ligne de tendance = sommets de chaque cycle (pointillé doré)
+  let trend="";
+  if(segs.length>=2){
+    const peaks=segs.map(s=>{ let best=s.pts[0]; s.pts.forEach(p=>{if(p.v>best.v)best=p;}); return best; });
+    const d=peaks.map((p,k)=>`${k?'L':'M'}${x(p.i).toFixed(1)} ${y(p.v).toFixed(1)}`).join(' ');
+    trend=`<path d="${d}" fill="none" stroke="#e0b34a" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.7"/>`;
+  }
+
+  // Marqueurs : deloads (bleu creux), recyclages (gros point orange), dernier point
+  let marks="";
+  pts.forEach((h,i)=>{
+    if(h.deload){ marks+=`<circle cx="${x(i).toFixed(1)}" cy="${y(vals[i]).toFixed(1)}" r="3.5" fill="var(--bg)" stroke="#5b8fb0" stroke-width="1.8"/>`; }
+  });
+  // Points de début de cycle (sauf le tout premier) = juste après un recyclage
+  segs.forEach((s,si)=>{ if(si>0){ const p=s.pts[0]; marks+=`<circle cx="${x(p.i).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="4" fill="#e0b34a"/>`; } });
+  // Dernier point en évidence
+  marks+=`<circle cx="${x(n-1).toFixed(1)}" cy="${y(vals[n-1]).toFixed(1)}" r="4.5" fill="${colorFor(pts[n-1].cycle)}" stroke="var(--bg)" stroke-width="1.5"/>`;
+
+  // Grille horizontale légère (min, milieu, max)
+  const gridVals=[min, (min+max)/2, max];
+  let grid="";
+  gridVals.forEach(gv=>{ const yy=y(gv).toFixed(1); grid+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="var(--line)" stroke-width="0.8" opacity="0.4"/><text x="${W-R}" y="${(parseFloat(yy)-3).toFixed(1)}" fill="var(--ink-faint)" font-size="9" text-anchor="end">${fmt(round(gv))}</text>`; });
+
+  const legend = segs.length>=2
+    ? `<div class="chart-legend"><span><i style="background:#e0b34a"></i>tendance (sommets)</span><span><i style="background:#e0b34a;border-radius:50%"></i>recyclage</span>${pts.some(h=>h.deload)?'<span><i style="background:transparent;border:1.5px solid #5b8fb0;border-radius:50%"></i>deload</span>':''}</div>`
+    : '';
+
+  return `<div class="chart">
+    <svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;margin-top:4px">
+      ${grid}${drops}${paths}${trend}${marks}
+    </svg>
+    <div class="cap"><span>${frDate(pts[0].date)}</span><span>${n} séances</span><span style="color:var(--forge)">${frDate(pts[n-1].date)}</span></div>
+    ${legend}</div>`;
 }
 
 /* ---- réglages / renommage ---- */
 function renderEdit(){
   const [e]=findEx(S.current); if(!e){ go('home'); return; }
   document.getElementById('title').textContent="Réglages";
-  const typ = e.scheme==="reps"?"reps" : e.scheme==="free"?"free" : (e.migBy==="reps"?"mig_reps":"mig_weight");
+  const typ = e.scheme==="free"?"free" : (e.psMode==="reps"?"perset_reps":"perset_mig");
   let html=`<div class="detail"><div class="adj">`;
   html+=`<div class="iline"><label>Nom</label><input id="f_name" value="${esc(e.name)}" style="width:180px;text-align:left"></div>`;
   html+=`<div class="iline"><label>Progression</label>
     <select id="f_type" onchange="changeType('${e.id}')">
-      <option value="reps" ${typ==='reps'?'selected':''}>Reps montantes (+charge)</option>
-      <option value="mig_weight" ${typ==='mig_weight'?'selected':''}>Migration — charge</option>
+      <option value="perset_mig" ${typ==='perset_mig'?'selected':''}>Série/série · migration charge</option>
+      <option value="perset_reps" ${typ==='perset_reps'?'selected':''}>Série/série · reps montantes</option>
       <option value="free" ${typ==='free'?'selected':''}>Simple</option>
     </select></div>`;
-  if(typ==="reps"){
+  if(typ==="perset_mig"){
     html+=iline("Séries","f_sets",e.sets);
-    html+=iline("Reps actuelles","f_cur",e.currentReps);
-    html+=iline("Reps maxi (avant +charge)","f_repMax",e.repMax);
+    html+=iline("Reps cible / série","f_preps",e.prescribedReps);
+    html+=iline("Charge de base (kg, 0 = PdC)","f_base",persetTopWP(e).weight||0);
+    html+=iline("Incrément charge (kg)","f_inc",e.inc);
+    html+=`<div class="prev">Quand les ${e.sets||4} séries passent leurs ${e.prescribedReps||10} reps, une série monte d'un cran (charge). Modifier « charge de base » réinitialise les séries.</div>`;
+  } else if(typ==="perset_reps"){
+    html+=iline("Séries","f_sets",e.sets);
     html+=iline("Reps mini (après +charge)","f_repMin",e.repMin);
-    html+=iline("Charge (kg, 0 = PdC)","f_weight",e.weight);
+    html+=iline("Reps maxi (avant +charge)","f_repMax",e.repMax);
+    html+=iline("Charge de base (kg, 0 = PdC)","f_base",persetTopWP(e).weight||0);
     html+=iline("Incrément charge (kg)","f_inc",e.inc);
-  } else if(typ==="mig_weight"){
-    html+=iline("Séries","f_sets",e.sets);
-    html+=iline("Reps / série","f_fix",e.migFix);
-    html+=iline("Charge de base (kg)","f_base",e.migBase);
-    html+=iline("Incrément charge (kg)","f_inc",e.inc);
-    html+=iline("Séries déjà en haut","f_at",e.migSetsAtNext);
-  } else if(typ==="mig_reps"){
-    html+=iline("Séries","f_sets",e.sets);
-    html+=iline("Reps de base","f_base",e.migBase);
-    html+=iline("Leste (kg, 0 = PdC)","f_fix",e.migFix);
-    html+=iline("Incrément reps","f_inc",e.inc);
-    html+=iline("Séries déjà en haut","f_at",e.migSetsAtNext);
+    html+=`<div class="prev">Les reps montent ${e.repMin||10}→${e.repMax||20} sur toutes les séries. Au plafond, +charge et retour à ${e.repMin||10}. Modifier « charge de base » réinitialise les séries.</div>`;
   }
   html+=`<button class="btn full" style="margin-top:14px" onclick="saveEdit('${e.id}')">Enregistrer</button>
     <button class="btn ghost full" style="margin-top:8px" onclick="go('ex','${e.id}')">Annuler</button>
@@ -835,26 +1152,81 @@ function gv(id){ const el=document.getElementById(id); return el?parseFloat(el.v
 function changeType(id){
   const [e]=findEx(id); const t=document.getElementById('f_type').value;
   const name=document.getElementById('f_name').value;
-  if(t==="reps"){ e.scheme="reps"; e.migBy=null; e.sets=e.sets||4; e.repMin=e.repMin||8; e.repMax=e.repMax||20; e.weight=e.weight||0; e.inc=e.inc||2; e.currentReps=e.currentReps||10; }
-  else if(t==="mig_weight"){ e.scheme="migration"; e.migBy="weight"; e.sets=e.sets||4; e.migFix=e.migFix||10; e.migBase=e.migBase||60; e.inc=e.inc||2.5; e.migSetsAtNext=e.migSetsAtNext||0; }
-  else if(t==="mig_reps"){ e.scheme="migration"; e.migBy="reps"; e.sets=e.sets||4; e.migBase=e.migBase||10; e.migFix=e.migFix||0; e.inc=e.inc||2; e.migSetsAtNext=e.migSetsAtNext||0; }
-  else { e.scheme="free"; e.migBy=null; }
+  const base = targetTopWeight(e)||0;
+  if(t==="perset_mig"){
+    e.scheme="perset"; e.psMode="migration"; e.migBy=null;
+    e.sets=e.sets||4; e.prescribedReps=e.prescribedReps||10; e.inc=e.inc||2.5;
+    if(!e.series||!e.series.length) e.series=Array.from({length:e.sets},()=>({weight:base, repTarget:e.prescribedReps}));
+  }
+  else if(t==="perset_reps"){
+    e.scheme="perset"; e.psMode="reps"; e.migBy=null;
+    e.sets=e.sets||4; e.repMin=e.repMin||10; e.repMax=e.repMax||20; e.inc=e.inc||2;
+    if(!e.series||!e.series.length) e.series=Array.from({length:e.sets},()=>({weight:base, repTarget:e.repMin}));
+  }
+  else { e.scheme="free"; e.psMode=null; e.migBy=null; }
   e.name=name||e.name; renderEdit();
 }
 function saveEdit(id){
   const [e]=findEx(id); const t=document.getElementById('f_type').value;
   e.name=document.getElementById('f_name').value||e.name;
-  if(t==="reps"){ e.scheme="reps"; e.migBy=null; e.sets=gv('f_sets'); e.currentReps=gv('f_cur'); e.repMax=gv('f_repMax'); e.repMin=gv('f_repMin'); e.weight=gv('f_weight'); e.inc=gv('f_inc'); }
-  else if(t==="mig_weight"){ e.scheme="migration"; e.migBy="weight"; e.sets=gv('f_sets'); e.migFix=gv('f_fix'); e.migBase=gv('f_base'); e.inc=gv('f_inc'); e.migSetsAtNext=Math.min(gv('f_at')||0, gv('f_sets')||1); }
-  else if(t==="mig_reps"){ e.scheme="migration"; e.migBy="reps"; e.sets=gv('f_sets'); e.migBase=gv('f_base'); e.migFix=gv('f_fix'); e.inc=gv('f_inc'); e.migSetsAtNext=Math.min(gv('f_at')||0, gv('f_sets')||1); }
-  else { e.scheme="free"; e.migBy=null; e.sets=4; }
+  if(t==="perset_mig" || t==="perset_reps"){
+    e.scheme="perset"; e.migBy=null;
+    const newSets=Math.max(1,Math.round(gv('f_sets')||4));
+    e.inc=gv('f_inc')||2.5;
+    const base=gv('f_base'); const prevBase=persetTopWP(e).weight||0;
+    let resetRep;
+    if(t==="perset_mig"){ e.psMode="migration"; e.prescribedReps=Math.max(1,Math.round(gv('f_preps')||10)); resetRep=e.prescribedReps; }
+    else { e.psMode="reps"; e.repMin=Math.max(1,Math.round(gv('f_repMin')||10)); e.repMax=Math.max(e.repMin,Math.round(gv('f_repMax')||20)); resetRep=e.repMin; }
+    // Réinitialiser les séries si nombre changé, base changée, ou pas encore de séries
+    if(!e.series || e.series.length!==newSets || (base!=null && base!==prevBase)){
+      e.series=Array.from({length:newSets},()=>({weight:base||0, repTarget:resetRep}));
+    }
+    e.sets=newSets;
+  }
+  else { e.scheme="free"; e.psMode=null; e.migBy=null; e.sets=4; }
   save(); toast("Enregistré"); go('ex',id);
 }
 function delEx(id){ for(const g of S.groups){ const i=g.ex.findIndex(x=>x.id===id); if(i>=0){ g.ex.splice(i,1); break; } } save(); go('home'); }
-function addEx(gi){ const e={id:uid(),name:"Nouvel exercice",scheme:"reps",sets:4,repMin:8,repMax:20,weight:0,inc:2,currentReps:10,history:[]}; S.groups[gi].ex.push(e); save(); go('edit',e.id); }
+function addEx(gi){ const e={id:uid(),name:"Nouvel exercice",scheme:"perset",psMode:"reps",sets:4,repMin:10,repMax:20,inc:2,series:Array.from({length:4},()=>({weight:0,repTarget:10})),history:[]}; S.groups[gi].ex.push(e); save(); go('edit',e.id); }
 function resetAll(){
   if(!confirmReset){ confirmReset=true; renderHome(); setTimeout(()=>{confirmReset=false; if(S.view==='home') renderHome();},4000); return; }
-  confirmReset=false; S=defaults(); save(); go('home');
+  confirmReset=false; S=convertSchemes(defaults()); save(); go('home');
+}
+function exportData(){
+  const data = JSON.stringify({groups:S.groups});
+  // Tenter le presse-papier, sinon afficher dans une zone à copier
+  navigator.clipboard?.writeText(data).then(
+    ()=>toast("Données copiées ✓ — colle-les dans une note"),
+    ()=>showIO("export", data)
+  ) || showIO("export", data);
+}
+function importData(){ showIO("import", ""); }
+function showIO(mode, data){
+  const overlay=document.createElement('div');
+  overlay.className='io-overlay';
+  overlay.innerHTML=`<div class="io-card">
+    <h3>${mode==="export"?"Exporter":"Importer"}</h3>
+    <p class="io-note">${mode==="export"
+      ? "Copie tout ce texte et garde-le (note, mail). Pour restaurer : Importer sur le nouveau téléphone."
+      : "Colle ici le texte exporté, puis Importer. ⚠ Ça remplace tes données actuelles."}</p>
+    <textarea class="io-text" id="ioText" ${mode==="export"?"readonly":""}>${mode==="export"?esc(data):""}</textarea>
+    <div class="io-actions">
+      ${mode==="import"?`<button class="btn full" onclick="doImport()">Importer (remplacer)</button>`:`<button class="btn full" onclick="copyIO()">Copier</button>`}
+      <button class="btn ghost full" onclick="closeIO()">Fermer</button>
+    </div></div>`;
+  document.body.appendChild(overlay);
+  if(mode==="export"){ const t=document.getElementById('ioText'); t.focus(); t.select(); }
+}
+function copyIO(){ const t=document.getElementById('ioText'); t.select(); try{document.execCommand('copy');toast("Copié ✓");}catch(e){toast("Sélectionne et copie manuellement");} }
+function closeIO(){ const o=document.querySelector('.io-overlay'); if(o) o.remove(); }
+function doImport(){
+  const t=document.getElementById('ioText'); if(!t) return;
+  try{
+    const obj=JSON.parse(t.value.trim());
+    if(!obj.groups || !Array.isArray(obj.groups)) throw new Error("format");
+    S.groups=obj.groups; S.collapsed={}; S.editingGroup=null;
+    save(); closeIO(); go('home'); toast("Données importées ✓");
+  }catch(e){ toast("Texte invalide — vérifie le copier-coller"); }
 }
 
 /* ============================================================ BOOT ============================================================ */
@@ -867,6 +1239,8 @@ function resetAll(){
     g.name = g.name.replace(/^S[eé]ance\s*\d+\s*[·\-·]\s*/i,'').trim();
     if(!g.name) g.name = "Séance";
   });
+  // Conversion : tous les exercices reps/migration passent en série par série
+  convertSchemes(S);
   save(); render();
 })();
 

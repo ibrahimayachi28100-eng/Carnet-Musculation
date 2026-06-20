@@ -699,8 +699,8 @@ function persetSessionHTML(e){
       <button class="ps-check ${r.done?'on':''}" onclick="psToggle(${i})">${r.done?'✓':'valider'}</button>
     </div>`).join('');
   const allDone = psSession.rows.length>0 && psSession.rows.every(r=>r.done);
-  const rmap={6:"+4",7:"+3","7.5":"+2",8:"+2","8.5":"+1",9:"+1","9.5":"½",10:"0"};
-  const rpeBtns=[6,7,8,8.5,9,9.5,10].map(v=>
+  const rmap={5:"+5",6:"+4",7:"+3","7.5":"+2",8:"+2","8.5":"+1",9:"+1","9.5":"½",10:"0"};
+  const rpeBtns=[5,6,7,8,8.5,9,9.5,10].map(v=>
     `<button class="${psSession.rpe===v?'on':''}" onclick="psRpe(${v})"><span class="rpe-v">${v}</span><span class="rpe-r">${rmap[v]}</span></button>`).join('');
   return `<div class="ps-session">
     ${rows}
@@ -737,7 +737,7 @@ function renderEx(){
   const dn=loggedToday(e);
   const hist=e.history.slice(-10);
   let html=`<div class="detail">`;
-  const sessNum = dn ? (e.cycleSess||0) : (e.cycleSess||0)+1;
+  const sessNum = (e.cycleSess||0)+1;
   const cyc = (e.scheme!=="free") ? ` &middot; Cycle ${e.cycle||1} &middot; séance ${sessNum}` : '';
   const pr = bestPR(e);
   html+=`<div class="hero" id="hero">
@@ -801,10 +801,13 @@ function renderEx(){
         html+=`<div class="hist">`;
         for(let i=sessions.length-1;i>=0;i--){ const h=sessions[i];
           const tag = h.deload ? ' style="border-color:#3a6080"' : (h.recycle ? ' style="border-color:#3a3226"' : '');
-          html+=`<div class="hrow"${tag}><div class="hd">${frDate(h.date)}</div>
+          const gi = e.history.indexOf(h);
+          const rpeCell = h.rpe ? `<div class="hr num" style="color:${rpeColor(h.rpe)}">@${h.rpe}</div>` : `<div class="hr num"></div>`;
+          const clickable = (!h.recycle) ? ` onclick="editHist('${e.id}',${gi})" style="cursor:pointer"` : '';
+          html+=`<div class="hrow"${tag}${clickable}><div class="hd">${frDate(h.date)}</div>
             <div class="hp num">${h.pr?'<span class="pr-star">⭐</span> ':''}${esc(h.text)}</div>
             ${h.weight>0 && !h.recycle?`<div class="he num">1RM ~ ${fmt(h.e1rm)} kg</div>`:''}
-            <div class="hr num">${h.rpe?('@'+h.rpe):''}</div></div>`;
+            ${rpeCell}</div>`;
         }
         html+=`</div>`;
       }
@@ -815,6 +818,28 @@ function renderEx(){
   html+=`<a class="edit-link" onclick="go('edit','${e.id}')">⚙ Régler / renommer cet exercice</a></div>`;
   V.innerHTML=html;
 }
+function rpeColor(v){ if(!v||v<5) return 'var(--ink-faint)'; if(v<7) return 'var(--done)'; if(v<9) return 'var(--forge)'; return '#e0524f'; }
+function editHist(id, gi){
+  const [e]=findEx(id); if(!e) return;
+  const h=e.history[gi]; if(!h) return;
+  const rmap={5:"+5",6:"+4",7:"+3","7.5":"+2",8:"+2","8.5":"+1",9:"+1","9.5":"½",10:"0"};
+  const btns=[5,6,7,8,8.5,9,9.5,10].map(v=>
+    `<button class="${h.rpe===v?'on':''}" style="${h.rpe===v?('background:'+rpeColor(v)+';border-color:'+rpeColor(v)+';color:#10130f'):''}" onclick="setHistRpe('${id}',${gi},${v})"><span class="rpe-v">${v}</span><span class="rpe-r">${rmap[v]}</span></button>`).join('');
+  const overlay=document.createElement('div');
+  overlay.className='io-overlay';
+  overlay.innerHTML=`<div class="io-card">
+    <h3>Corriger la séance</h3>
+    <p class="io-note">${frDate(h.date)} &middot; ${esc(h.text)}</p>
+    <span class="rpe-legend">Effort (RPE) — corrige si tu t'es trompé</span>
+    <div class="rpe" style="margin-top:6px">${btns}</div>
+    <div class="io-actions">
+      <button class="btn ghost full" onclick="clearHistRpe('${id}',${gi})">Retirer le RPE</button>
+      <button class="btn ghost full" onclick="closeIO()">Fermer</button>
+    </div></div>`;
+  document.body.appendChild(overlay);
+}
+function setHistRpe(id, gi, v){ const [e]=findEx(id); if(e&&e.history[gi]){ e.history[gi].rpe=v; save(); } closeIO(); renderEx(); }
+function clearHistRpe(id, gi){ const [e]=findEx(id); if(e&&e.history[gi]){ e.history[gi].rpe=null; save(); } closeIO(); renderEx(); }
 function bestPR(e){
   let best=null;
   for(const h of e.history){

@@ -144,9 +144,9 @@
   .e1rm-label{font-size:9px;opacity:0.6;font-weight:500;margin-left:2px}
   .ps-session{margin-top:4px;display:flex;flex-direction:column;gap:8px}
   .ps-row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:10px 12px;transition:border-color .2s}
-  .ps-row.done{border-color:var(--forge);background:var(--forge-soft)}
+  .ps-row.done{border-color:var(--done);background:var(--done-soft)}
   .ps-n{font-size:13px;font-weight:800;color:var(--ink-dim);width:26px;flex-shrink:0}
-  .ps-row.done .ps-n{color:var(--forge)}
+  .ps-row.done .ps-n{color:var(--done)}
   .ps-steppers{display:flex;gap:8px;flex:1;justify-content:center}
   .ps-step{display:flex;align-items:center;gap:6px}
   .ps-step button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -155,7 +155,7 @@
   .ps-val b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
   .ps-val span{font-size:9px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em}
   .ps-check{width:54px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink-faint);font-size:11px;font-weight:700;flex-shrink:0}
-  .ps-check.on{background:var(--forge);color:#10130f;border-color:var(--forge);font-size:18px}
+  .ps-check.on{background:var(--done);color:#0c160f;border-color:var(--done);font-size:18px}
   .ps-rpe-wrap{margin-top:6px}
   .btn.dim{opacity:.55}
   /* history */
@@ -397,8 +397,9 @@ function persetNextMigration(e, achieved){
     return {weight:a.weight, repTarget:rt};
   });
   const allFull = achieved.every(a=>a.reps >= P);
-  const manuallyAdvanced = achieved.some((a,i)=> a.weight > (e.series[i]?e.series[i].weight:0));
-  if(allFull && !manuallyAdvanced){
+  // Si toutes les séries passent leurs reps, une série de plus monte d'un cran —
+  // que tu aies poussé manuellement ou non. Donc faire 2 séries à 12 → 3 à 12 la fois suivante.
+  if(allFull){
     const minW = Math.min(...next.map(s=>s.weight));
     const idx = next.findIndex(s=>s.weight===minW);
     next[idx] = {weight: round(minW + e.inc), repTarget: P};
@@ -707,7 +708,7 @@ function persetSessionHTML(e){
       <span class="rpe-legend">Effort sur ta série la plus dure (reps en réserve)</span>
       <div class="rpe">${rpeBtns}</div>
     </div>
-    <button class="btn full ${allDone?'':'dim'}" onclick="psFinish('${e.id}')">Terminer la séance${allDone?'':' (valide tes séries)'}</button>
+    <button class="btn full done ${allDone?'':'dim'}" onclick="psFinish('${e.id}')">${allDone?'Terminer l\'exercice':'Terminer l\'exercice (valide tes séries)'}</button>
   </div>`;
 }
 function psStep(i, field, delta){

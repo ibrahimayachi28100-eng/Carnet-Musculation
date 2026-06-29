@@ -307,6 +307,7 @@ function today(){ return new Date().toISOString().slice(0,10); }
 function frDate(iso){ const d=iso?new Date(iso+"T12:00"):new Date(); return d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'}); }
 function e1rm(w,reps){ if(!w) return reps; return w*(1+reps/30); }
 function save(){ store.set(S); }
+function savePsSession(){ if(psSession) store.set({...S, _psSession:psSession, _psForceNew:psForceNew}); }
 function findEx(id){ for(const g of S.groups) for(const e of g.ex) if(e.id===id) return [e,g]; return [null,null]; }
 function esc(s){ return (s+"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function migNextVal(e){ return round(e.migBase + e.inc); }
@@ -501,7 +502,26 @@ function undoLast(e){
    RENDU
    ============================================================ */
 const V=document.getElementById('view');
-function go(view,id){ psForceNew=false; psSession=null; S.view=view; S.current=id||null; save(); render(); window.scrollTo(0,0); }
+function go(view,id){
+  // Si on quitte un exercice perset en cours (séries non terminées), on sauvegarde psSession
+  if(S.view==='ex' && psSession && !psSession.rows.every(r=>r.done)){
+    S._psSession = psSession;
+    S._psForceNew = psForceNew;
+  }
+  // Reset psSession seulement si on change d'exercice ou si l'exercice est terminé
+  if(view!=='ex' || id!==S.current){
+    // on ne reset que si on change d'exercice
+    if(id!==S.current) psSession=null;
+  }
+  psForceNew=false;
+  S.view=view; S.current=id||null;
+  // Restaurer psSession si on revient sur le même exercice avec une session en cours
+  if(view==='ex' && id && S._psSession && S._psSession.exId===id && S._psSession.date===today()){
+    psSession = S._psSession;
+    psForceNew = S._psForceNew||false;
+  }
+  save(); render(); window.scrollTo(0,0);
+}
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1400); }
 function gearClick(){ if(S.current) go('edit',S.current); }
 function plusClick(){ if(S.current) psNewSession(S.current); }
@@ -679,7 +699,14 @@ function onDragEnd(){
 
 function persetSessionHTML(e){
   if(!psSession || psSession.exId!==e.id){
-    psSession={exId:e.id, rows:(e.series||[]).map(s=>({reps:s.repTarget, weight:s.weight, done:false})), rpe:null};
+    // Restaurer depuis S si disponible et du jour
+    if(S._psSession && S._psSession.exId===e.id && S._psSession.date===today()){
+      psSession = S._psSession;
+    } else {
+      psSession={exId:e.id, date:today(), rows:(e.series||[]).map(s=>({reps:s.repTarget, weight:s.weight, done:false})), rpe:null};
+      S._psSession = psSession; S._psForceNew = false;
+      save();
+    }
   }
   const rows = psSession.rows.map((r,i)=>`
     <div class="ps-row ${r.done?'done':''}">
@@ -716,11 +743,12 @@ function psStep(i, field, delta){
   const r=psSession.rows[i]; if(!r) return;
   if(field==='reps') r.reps=Math.max(0, r.reps+delta);
   else { const step=e.inc||2.5; r.weight=Math.max(0, round(r.weight+delta*step)); }
+  S._psSession=psSession; save();
   renderEx();
 }
-function psToggle(i){ const r=psSession.rows[i]; if(r) r.done=!r.done; renderEx(); }
-function psRpe(v){ psSession.rpe=(psSession.rpe===v?null:v); renderEx(); }
-function psNewSession(id){ psForceNew=true; psSession=null; renderEx(); }
+function psToggle(i){ const r=psSession.rows[i]; if(r){ r.done=!r.done; S._psSession=psSession; save(); } renderEx(); }
+function psRpe(v){ psSession.rpe=(psSession.rpe===v?null:v); S._psSession=psSession; save(); renderEx(); }
+function psNewSession(id){ psForceNew=true; psSession=null; S._psSession=null; S._psForceNew=true; save(); renderEx(); }
 function psFinish(id){
   const [e]=findEx(id); if(!e) return;
   if(loggedToday(e) && !psForceNew){ toast("Déjà validé aujourd'hui"); return; }
@@ -728,6 +756,8 @@ function psFinish(id){
   const achieved=psSession.rows.map(r=>({reps:r.reps, weight:r.weight}));
   persetFinish(e, achieved, psSession.rpe);
   psSession=null; psForceNew=false;
+  S._psSession=null; S._psForceNew=false;
+  save();
   renderEx();
 }
 
@@ -1264,6 +1294,13 @@ function doImport(){
 (async function(){
   S = await store.get();
   if(!S || !S.groups){ S = defaults(); await store.set(S); }
+  // Restaurer psSession si une session en cours existe du jour
+  if(S._psSession && S._psSession.date===today()){
+    psSession = S._psSession;
+    psForceNew = S._psForceNew||false;
+  } else {
+    S._psSession=null; S._psForceNew=false;
+  }
   S.view="home"; S.current=null; if(S.editingGroup==null) S.editingGroup=null;
   // Nettoyer les anciens noms "Séance N · Xxx" → garder juste "Xxx"
   S.groups.forEach(g=>{

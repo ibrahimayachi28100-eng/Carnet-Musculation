@@ -1235,12 +1235,13 @@ function saveEdit(id){
     const newSets=Math.max(1,Math.round(gv('f_sets')||4));
     e.inc=gv('f_inc')||2.5;
     const base=gv('f_base'); const prevBase=persetTopWP(e).weight||0;
+    const prevResetRep = (e.psMode==="migration") ? e.prescribedReps : e.repMin;
     let resetRep;
     if(t==="perset_mig"){ e.psMode="migration"; e.prescribedReps=Math.max(1,Math.round(gv('f_preps')||10)); resetRep=e.prescribedReps; }
     else { e.psMode="reps"; e.repMin=Math.max(1,Math.round(gv('f_repMin')||10)); e.repMax=Math.max(e.repMin,Math.round(gv('f_repMax')||20)); resetRep=e.repMin; }
-    // Réinitialiser les séries si nombre changé, base changée, ou pas encore de séries
-    if(!e.series || e.series.length!==newSets || (base!=null && base!==prevBase)){
-      e.series=Array.from({length:newSets},()=>({weight:base||0, repTarget:resetRep}));
+    // Réinitialiser les séries si nombre changé, base changée, reps cible changée, ou pas encore de séries
+    if(!e.series || e.series.length!==newSets || (base!=null && base!==prevBase) || resetRep!==prevResetRep){
+      e.series=Array.from({length:newSets},()=>({weight:(base!=null?base:prevBase)||0, repTarget:resetRep}));
     }
     e.sets=newSets;
   }
